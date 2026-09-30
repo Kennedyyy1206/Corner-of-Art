@@ -22,14 +22,35 @@ links.forEach(link => link.addEventListener('click', () => {
   menu.setAttribute('aria-expanded', 'false')
 }))
 
-const watch = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return
-    links.forEach(link => link.classList.toggle('on', link.getAttribute('href') === `#${entry.target.id}`))
-  })
-}, { rootMargin:'-40% 0px -52%' })
+const order = links.map(l => l.getAttribute('href').slice(1))
+let current = ''
 
-secs.forEach(sec => watch.observe(sec))
+function show(id, push = true) {
+  if (!order.includes(id)) id = 'home'
+  if (id === current) return
+  current = id
+  secs.forEach(sec => sec.classList.toggle('active', sec.id === id))
+  links.forEach(link => link.classList.toggle('on', link.getAttribute('href') === `#${id}`))
+  document.body.dataset.page = id
+  if (push) history.pushState(null, '', `#${id}`)
+  window.scrollTo(0, 0)
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault()
+  show(a.getAttribute('href').slice(1))
+}))
+
+const step = dir => show(order[(order.indexOf(current) + dir + order.length) % order.length])
+document.querySelector('.prev').addEventListener('click', () => step(-1))
+document.querySelector('.next').addEventListener('click', () => step(1))
+document.addEventListener('keydown', e => {
+  if (pop.open || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return
+  if (e.key === 'ArrowLeft') step(-1)
+  if (e.key === 'ArrowRight') step(1)
+})
+window.addEventListener('popstate', () => show(location.hash.slice(1), false))
+show(location.hash.slice(1) || 'home', false)
 
 const reveal = new IntersectionObserver(entries => {
   entries.forEach(entry => {
