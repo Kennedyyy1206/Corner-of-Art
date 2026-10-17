@@ -14,7 +14,7 @@
   --light: #dff5cb;
   --cream: #f8f5e9;
   --ink:   #172219;
-  --lime:  #d7ef72;
+  --sand:  #d7ef72;
 }
 
 /* =========================================================
@@ -256,8 +256,8 @@ body[data-page="contact"]::after{
   display:flex;
   align-items:center;
   justify-content:space-between; /* logo left, links right */
-  min-height:70px; /* bar height (60-90px) */
-  padding:0 40px; /* side space (20-60px) */
+  min-height:88px; /* bar height (70-100px), bigger than the footer */
+  padding:0 48px; /* side space (20-60px) */
   color:white;
   background:var(--deep); /* solid, so circles don't show through */
   box-shadow:0 10px 30px rgba(3,34,12,.18);
@@ -267,7 +267,7 @@ body[data-page="contact"]::after{
 .logo{
   color:white;
   font-family:"Great Vibes", cursive;
-  font-size:2rem; /* logo size (1.6-2.6rem) */
+  font-size:2.6rem; /* logo size (2-3rem) */
   white-space:nowrap;
 }
 
@@ -283,7 +283,8 @@ body[data-page="contact"]::after{
 /* Each link (equal width) */
 .nav a{
   flex:1;
-  padding:11px 19px; /* top/bottom (8-14px), sides (16-30px) */
+  padding:13px 22px; /* top/bottom (10-16px), sides (16-30px) */
+  font-size:1.1rem; /* link size (1-1.25rem) */
   text-align:center;
   border:1px solid transparent;
   border-radius:999px; /* 999px = pill, 8px = squarer */
@@ -488,6 +489,16 @@ blockquote span{
   transition:.35s;
 }
 
+/* only one card showing (a filter): centre it */
+.grid.solo{
+  grid-template-columns:minmax(0, 520px); /* card width (400-600px) */
+  justify-content:center;
+}
+
+.grid.solo .tall{
+  grid-row:auto;
+}
+
 .card:hover{
   transform:translateY(-6px);
 }
@@ -548,22 +559,35 @@ blockquote span{
 
 .card-txt{
   display:flex;
-  align-items:end;
-  justify-content:space-between;
-  gap:15px;
-  padding:24px 27px 27px;
+  flex-direction:column; /* title on top, type underneath */
+  align-items:flex-start;
+  gap:8px;
+  padding:24px 27px 8px;
 }
 
+/* short description under the title */
+.card-desc{
+  margin:0;
+  padding:0 27px 26px;
+  line-height:1.55;
+}
+
+/* highlighted title: the box wraps the whole title */
 .card-txt h3{
   margin:0;
+  padding:2px 14px 8px; /* space around the text (top, sides, bottom) */
   font-family:"Great Vibes", cursive;
-  font-size:2.2rem;
+  font-size:2.9rem; /* title size (2.2-3.4rem) */
   font-weight:400;
+  line-height:1.15;
+  color:var(--deep);
+  background:var(--sand); /* highlight colour */
+  border-radius:12px; /* corners (0 = square) */
 }
 
 .card-txt p{
   margin:0;
-  opacity:.7;
+  opacity:.85;
 }
 
 /* quote card */
@@ -580,7 +604,7 @@ blockquote span{
 
 .quote .sun{
   grid-row:span 2;
-  color:var(--lime);
+  color:var(--sand);
   font-size:4rem;
 }
 
@@ -756,7 +780,7 @@ blockquote span{
   color:var(--deep);
   font-weight:600;
   border-radius:50%;
-  background:var(--lime);
+  background:var(--sand);
 }
 
 .form{
@@ -830,7 +854,7 @@ blockquote span{
   align-items:center;
   justify-content:space-between;
   gap:25px;
-  padding:32px max(32px, calc((100% - 1180px) / 2));
+  padding:16px max(32px, calc((100% - 1180px) / 2)); /* slim footer (12-24px) */
   color:white;
   border-top:1px solid rgba(255,255,255,.12);
   background:var(--deep);
@@ -838,9 +862,15 @@ blockquote span{
   z-index:1;
 }
 
+.foot .logo,
+.pop-foot .logo{
+  font-size:1.5rem; /* small footer logo */
+}
+
 .foot p,
 .foot span{
   margin:0;
+  font-size:.9rem;
   color:#b8c9ba;
 }
 
@@ -883,7 +913,7 @@ blockquote span{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  min-height:70px; /* match header */
+  min-height:88px; /* match header */
   padding:0 40px; /* side space (20-60px) */
   color:white;
   background:var(--deep);
@@ -967,7 +997,7 @@ blockquote span{
   align-items:center;
   justify-content:space-between;
   gap:20px;
-  padding:26px 40px;
+  padding:16px 40px;
   color:white;
   background:var(--deep);
 }
@@ -1021,6 +1051,25 @@ blockquote span{
 
 /* Tablet */
 @media (max-width:1024px){
+  /* header fits on tablets */
+  .head{
+    padding:0 28px;
+  }
+
+  .head .logo{
+    font-size:2.2rem;
+  }
+
+  .nav{
+    margin-left:24px;
+  }
+
+  .nav a{
+    padding:12px 10px;
+    font-size:1rem;
+    white-space:nowrap; /* keep "About me" on one line */
+  }
+
   .wrap{
     width:min(100% - 48px, 900px);
   }
@@ -1088,8 +1137,12 @@ blockquote span{
   }
 
   /* header, menu, arrows, circles */
+  .head .logo{
+    font-size:2.2rem; /* logo size on phones */
+  }
+
   .head{
-    min-height:60px; /* smaller bar */
+    min-height:68px; /* phone bar height */
     padding:0 12px 0 20px;
   }
 
@@ -1107,7 +1160,7 @@ blockquote span{
 
   .nav{
     position:absolute;
-    top:64px; /* menu under the bar */
+    top:72px; /* menu under the bar */
     right:12px;
     display:none;
     flex:none;
@@ -1232,6 +1285,14 @@ blockquote span{
     height:440px;
   }
 
+  .card-desc{
+    padding:0 20px 22px;
+  }
+
+  .card-txt h3{
+    font-size:2.4rem; /* smaller title on phones */
+  }
+
   .card-txt{
     flex-direction:column;
     align-items:start;
@@ -1316,7 +1377,7 @@ blockquote span{
   /* footer */
   .foot{
     flex-direction:column;
-    padding:30px 20px 90px; /* bottom space so arrows don't cover text (70-110px) */
+    padding:22px 20px 90px; /* bottom space so arrows don't cover text (70-110px) */
     text-align:center;
   }
 
