@@ -1,8 +1,5 @@
 /* =========================================================
    CORNER OF ART - MAIN STYLESHEET
-   Sections: Tokens, Base, Typography & Buttons, Pages & Background
-   Circles, Header & Navigation, Home, Works, About, Contact,
-   Footer, Artwork Popup, Animations, Responsive.
    ========================================================= */
 
 /* =========================================================
@@ -33,7 +30,7 @@ html{
 }
 
 body{
-  --o1:rgba(44,107,49,.27);  /* circle colours, changed per page in PAGES & BACKGROUND CIRCLES */
+  --o1:rgba(44,107,49,.27); /* circle colours (change per page) */
   --o2:rgba(22,86,32,.3);
   margin:0;
   color:var(--ink);
@@ -142,18 +139,21 @@ h2{
 
 /* =========================================================
    PAGES & BACKGROUND CIRCLES
-   One page is visible at a time; the two circles live in a fixed layer and
-   glide to new spots (and colours) when the page changes.
+   One page at a time; the circles move with each page.
    ========================================================= */
 
 .sec{
   position:relative;
   z-index:1;
-  display:none;
   min-height:100vh;
 }
 
-.sec.active{
+/* Hidden only once script.js runs (it adds .js) */
+.js .sec{
+  display:none;
+}
+
+.js .sec.active{
   display:block;
   animation:pagein .6s ease;
 }
@@ -181,22 +181,18 @@ body[data-page="contact"]{
   --o2:rgba(215,239,114,.12);
 }
 
-/* circles */
-.bg{
+/* Circles (CSS only) */
+body::before,
+body::after{
+  content:"";
   position:fixed;
-  inset:0;
   z-index:0;
-  overflow:hidden;
-  pointer-events:none;
-}
-
-.orb{
-  position:absolute;
   border-radius:50%;
+  pointer-events:none;
   transition:all 1.2s cubic-bezier(.6,.1,.2,1), background .6s;
 }
 
-.o1{
+body::before{
   width:590px;
   height:590px;
   right:3%;
@@ -204,7 +200,7 @@ body[data-page="contact"]{
   background:var(--o1);
 }
 
-.o2{
+body::after{
   width:430px;
   height:430px;
   left:15%;
@@ -213,35 +209,35 @@ body[data-page="contact"]{
 }
 
 /* circle positions per page */
-body[data-page="works"]   .o1{
+body[data-page="works"]::before{
   right:-8%;
   top:48%;
 }
 
-body[data-page="works"]   .o2{
+body[data-page="works"]::after{
   left:-6%;
   bottom:auto;
   top:8%;
 }
 
-body[data-page="about"]   .o1{
+body[data-page="about"]::before{
   right:auto;
   left:-8%;
   top:-12%;
 }
 
-body[data-page="about"]   .o2{
+body[data-page="about"]::after{
   left:auto;
   right:6%;
   bottom:-14%;
 }
 
-body[data-page="contact"] .o1{
+body[data-page="contact"]::before{
   right:-10%;
   top:-14%;
 }
 
-body[data-page="contact"] .o2{
+body[data-page="contact"]::after{
   left:4%;
   bottom:-16%;
 }
@@ -250,50 +246,51 @@ body[data-page="contact"] .o2{
    HEADER & NAVIGATION
    ========================================================= */
 
+/* Top bar: full width. Numbers show suggested ranges. */
 .head{
   position:fixed;
   z-index:20;
-  top:18px;
-  left:50%;
+  top:0; /* stick to top */
+  left:0; /* left edge */
+  right:0; /* right edge */
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  width:min(1180px, calc(100% - 36px));
-  min-height:66px;
-  padding:0 15px 0 26px;
+  justify-content:space-between; /* logo left, links right */
+  min-height:70px; /* bar height (60-90px) */
+  padding:0 40px; /* side space (20-60px) */
   color:white;
-  border:1px solid rgba(255,255,255,.17);
-  border-radius:18px;
-  background:rgba(6,52,20,.9);
-  box-shadow:0 16px 50px rgba(3,34,12,.16);
-  backdrop-filter:blur(16px);
-  transform:translateX(-50%);
+  background:var(--deep); /* solid, so circles don't show through */
+  box-shadow:0 10px 30px rgba(3,34,12,.18);
 }
 
+/* Logo */
 .logo{
   color:white;
   font-family:"Great Vibes", cursive;
-  font-size:2rem;
+  font-size:2rem; /* logo size (1.6-2.6rem) */
   white-space:nowrap;
 }
 
+/* Links area */
 .nav{
   display:flex;
-  flex:1;
+  flex:1; /* fills free space */
   align-items:center;
-  gap:4px;
-  margin-left:40px;
+  gap:6px; /* link gap (0-20px) */
+  margin-left:60px; /* gap from logo (20-100px) */
 }
 
+/* Each link (equal width) */
 .nav a{
   flex:1;
-  padding:11px 19px;
+  padding:11px 19px; /* top/bottom (8-14px), sides (16-30px) */
   text-align:center;
   border:1px solid transparent;
-  border-radius:999px;
+  border-radius:999px; /* 999px = pill, 8px = squarer */
   font-family:"Playfair Display", serif;
 }
 
+/* Hover / current page */
 .nav a:hover,
 .nav a.on{
   border-color:rgba(255,255,255,.65);
@@ -317,7 +314,7 @@ body[data-page="contact"] .o2{
   transition:.25s;
 }
 
-/* previous / next page arrows */
+/* Prev / next arrows */
 .arrow{
   position:fixed;
   z-index:15;
@@ -746,6 +743,11 @@ blockquote span{
   border-radius:999px;
 }
 
+.social svg{
+  width:18px; /* icon size (16-24px) */
+  height:18px;
+}
+
 .social span{
   display:grid;
   place-items:center;
@@ -765,8 +767,7 @@ blockquote span{
   background:var(--cream);
 }
 
-/* Your own picture on top of the form (see the guide comment in index.html).
-   The extra space above the form only appears once the picture is added. */
+/* Capybara picture (form gets extra space only when it is added) */
 
 .form:has(.capy){
   margin-top:70px;
@@ -833,6 +834,8 @@ blockquote span{
   color:white;
   border-top:1px solid rgba(255,255,255,.12);
   background:var(--deep);
+  position:relative; /* sits above the circles */
+  z-index:1;
 }
 
 .foot p,
@@ -849,53 +852,151 @@ blockquote span{
    ARTWORK POPUP
    ========================================================= */
 
+/* Full-screen artwork viewer */
 .pop{
-  width:min(820px, calc(100% - 30px));
-  padding:0;
-  color:white;
-  border:0;
-  border-radius:20px;
-  background:#09170d;
-  overflow:hidden;
-  box-shadow:0 25px 90px rgba(0,0,0,.4);
-}
-
-.pop::backdrop{
-  background:rgba(2,13,5,.79);
-  backdrop-filter:blur(7px);
-}
-
-.pop img{
-  max-height:76vh;
-  object-fit:contain;
-  background:#030704;
-}
-
-.pop p{
+  width:100%;
+  height:100%;
+  max-width:none; /* remove default size limit */
+  max-height:none;
   margin:0;
-  padding:18px 25px;
-  font-family:"Great Vibes", cursive;
-  font-size:2rem;
+  padding:0;
+  border:0;
+  color:var(--ink);
+  background:var(--leaf); /* light green */
+  overflow:auto; /* scroll on small screens */
 }
 
-.x{
-  position:absolute;
-  z-index:2;
-  top:13px;
-  right:13px;
-  width:42px;
-  height:42px;
+/* Flex only when open */
+.pop[open]{
+  display:flex;
+  flex-direction:column;
+  animation:slideIn .5s ease; /* slide-in speed (.3-.8s) */
+}
+
+/* Added by script.js while closing */
+.pop.closing{
+  animation:slideOut .4s ease forwards;
+}
+
+/* Viewer top bar */
+.pop-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:70px; /* match header */
+  padding:0 40px; /* side space (20-60px) */
   color:white;
-  border:1px solid rgba(255,255,255,.3);
-  border-radius:50%;
-  background:rgba(0,0,0,.44);
-  font-size:1.7rem;
+  background:var(--deep);
+}
+
+/* Back button (.x closes the viewer) */
+.x{
+  padding:11px 24px; /* top/bottom (8-14px), sides (18-32px) */
+  color:white;
+  border:1px solid rgba(255,255,255,.65);
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  font-family:"Playfair Display", serif;
   cursor:pointer;
+}
+
+.x:hover{
+  background:rgba(255,255,255,.2);
+}
+
+/* Picture + card columns */
+.pop-body{
+  display:grid;
+  grid-template-columns:1fr 1fr; /* columns (try .8fr 1.2fr) */
+  gap:70px; /* gap (30-90px) */
+  align-items:stretch; /* card matches frame height */
+  width:min(1100px, calc(100% - 64px));
+  margin:auto; /* center */
+  padding:60px 0; /* top/bottom space (40-90px) */
+}
+
+/* Picture frame */
+.pop-frame{
+  justify-self:center;
+  align-self:center;
+  padding:22px; /* thickness (10-30px) */
+  border:2px solid var(--deep);
+  background:var(--green); /* frame colour */
+  box-shadow:14px 16px 0 var(--dark); /* offset shadow (0 = none) */
+}
+
+.pop-frame img{
+  width:auto; /* keep picture ratio */
+  max-width:100%;
+  max-height:68vh; /* max height (50-75vh) */
+}
+
+/* Info card */
+.pop-info{
+  min-height:340px; /* min height (300-600px) */
+  padding:40px; /* inner space (24-50px) */
+  border-radius:24px; /* corners (10-40px) */
+  background:var(--green);
+  box-shadow:0 20px 45px rgba(25,62,32,.18);
+}
+
+.pop-title{
+  margin:0 0 6px;
+  font-family:"Great Vibes", cursive;
+  font-size:3rem; /* title size (2-4rem) */
+  font-weight:400;
+}
+
+.pop-type{
+  margin:0 0 22px;
+  font-size:.77rem;
+  font-weight:600;
+  letter-spacing:.19em;
+  text-transform:uppercase;
+}
+
+.pop-desc{
+  margin:0;
+  font-size:1.05rem; /* text size (1-1.2rem) */
+  line-height:1.75;
+}
+
+/* Viewer footer */
+.pop-foot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:26px 40px;
+  color:white;
+  background:var(--deep);
+}
+
+.pop-foot p{
+  margin:0;
+  color:#b8c9ba;
 }
 
 /* =========================================================
    ANIMATIONS
    ========================================================= */
+
+/* Slide direction: -100% = from the left (moves right), 100% = from the right */
+:root{
+  --slide-from:-100%;
+}
+
+@keyframes slideIn{
+  from{opacity:0; transform:translateX(var(--slide-from))}
+
+  to{opacity:1; transform:none}
+}
+
+@keyframes slideOut{
+  from{opacity:1; transform:none}
+
+  to{opacity:0; transform:translateX(var(--slide-from))}
+}
 
 @keyframes pagein{
   from{opacity:0; transform:translateY(14px)}
@@ -903,13 +1004,13 @@ blockquote span{
   to{opacity:1; transform:none}
 }
 
-.fade{
+.js .fade{
   opacity:0;
   transform:translateY(24px);
   transition:opacity .75s ease, transform .75s ease;
 }
 
-.fade.show{
+.js .fade.show{
   opacity:1;
   transform:none;
 }
@@ -988,9 +1089,8 @@ blockquote span{
 
   /* header, menu, arrows, circles */
   .head{
-    top:10px;
-    min-height:60px;
-    padding-left:20px;
+    min-height:60px; /* smaller bar */
+    padding:0 12px 0 20px;
   }
 
   .menu{
@@ -1007,8 +1107,8 @@ blockquote span{
 
   .nav{
     position:absolute;
-    top:69px;
-    right:0;
+    top:64px; /* menu under the bar */
+    right:12px;
     display:none;
     flex:none;
     flex-direction:column;
@@ -1051,12 +1151,12 @@ blockquote span{
     right:14px;
   }
 
-  .o1{
+  body::before{
     width:420px;
     height:420px;
   }
 
-  .o2{
+  body::after{
     width:300px;
     height:300px;
   }
@@ -1194,10 +1294,29 @@ blockquote span{
     width:170px;
   }
 
+  /* artwork viewer: picture on top, card underneath */
+  .pop-bar,
+  .pop-foot{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .pop-body{
+    grid-template-columns:1fr;
+    gap:40px;
+    width:calc(100% - 36px);
+    padding:40px 0;
+  }
+
+  .pop-info{
+    min-height:0;
+    padding:28px 22px;
+  }
+
   /* footer */
   .foot{
     flex-direction:column;
-    padding:30px 20px;
+    padding:30px 20px 90px; /* bottom space so arrows don't cover text (70-110px) */
     text-align:center;
   }
 
@@ -1216,5 +1335,6 @@ blockquote span{
   *:before,
   *:after{
     transition-duration:.01ms !important;
+    animation-duration:.01ms !important; /* no motion if user prefers less */
   }
 }
