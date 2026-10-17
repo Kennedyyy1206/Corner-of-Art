@@ -6,6 +6,7 @@ const links = [...document.querySelectorAll('.nav a')]
 const secs = [...document.querySelectorAll('.sec')]
 const tabs = document.querySelectorAll('.tab')
 const cards = document.querySelectorAll('.card[data-kind]')
+const grid = document.querySelector('.grid')
 const pop = document.querySelector('.pop')
 // Viewer parts that get filled in when a picture is clicked
 const popImg = pop.querySelector('.pop-frame img')
@@ -37,6 +38,7 @@ function show(id, push = true) {
   secs.forEach(sec => sec.classList.toggle('active', sec.id === id))
   links.forEach(link => link.classList.toggle('on', link.getAttribute('href') === `#${id}`))
   document.body.dataset.page = id
+  if (id === 'works') filterWorks('all') // always open Works on "All"
   if (push) history.pushState(null, '', `#${id}`)
   window.scrollTo(0, 0)
 }
@@ -69,12 +71,19 @@ const reveal = new IntersectionObserver(entries => {
 
 document.querySelectorAll('.fade').forEach(el => reveal.observe(el))
 
-tabs.forEach(tab => tab.addEventListener('click', () => {
-  tabs.forEach(btn => btn.classList.remove('on'))
-  tab.classList.add('on')
-  const kind = tab.dataset.kind
-  cards.forEach(card => card.classList.toggle('hide', kind !== 'all' && card.dataset.kind !== kind))
-}))
+// Show one kind of work (or "all"); centre the card if only one is left
+function filterWorks(kind) {
+  let visible = 0
+  tabs.forEach(btn => btn.classList.toggle('on', btn.dataset.kind === kind))
+  cards.forEach(card => {
+    const hide = kind !== 'all' && card.dataset.kind !== kind
+    card.classList.toggle('hide', hide)
+    if (!hide) visible++
+  })
+  grid.classList.toggle('solo', visible === 1)
+}
+
+tabs.forEach(tab => tab.addEventListener('click', () => filterWorks(tab.dataset.kind)))
 
 // Click a picture: fill the viewer from its data- attributes, then open it
 document.querySelectorAll('.art').forEach(btn => btn.addEventListener('click', () => {
