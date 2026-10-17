@@ -24,13 +24,14 @@
     </nav>
   </header>
 
+  <button class="arrow prev" aria-label="Previous page">‹</button>
+  <button class="arrow next" aria-label="Next page">›</button>
+
   <main>
     <section id="home" class="hero sec">
-      <div class="orb o1"></div>
-      <div class="orb o2"></div>
       <div class = "wrap hero-in">
         <div class="hero-pic fade">
-          <img src="assets/corner.jpg" alt="Corner at cafe">
+          <img src="assets/beggining.jpe" alt="Corner at cafe">
           <span class="note">artist, dreamer, maker</span>
         </div>
         <div class="hero-txt fade">
@@ -66,14 +67,15 @@
 
         <div class="grid">
           <article class="card tall fade" data-kind="digital">
-            <button class="art" data-src="assets/parol.png" data-name="Start of the Parol">
+            <!-- data-name / data-type / data-desc = text shown in the viewer -->
+            <button class="art" data-src="assets/parol.png" data-name="Start of the Parol" data-type="Digital drawing" data-desc="Write a few lines about this artwork here: the idea behind it, the tools you used, or the story.">
               <img src="assets/parol.png" alt="Parol art">
               <span>View art</span>
             </button>
             <div class="card-txt"><h3>Start of the Parol</h3><p>Digital drawing</p></div>
           </article>
           <article class="card wide fade" data-kind="paint">
-            <button class="art" data-src="assets/whirl.png" data-name="Whirl Creation">
+            <button class="art" data-src="assets/whirl.png" data-name="Whirl Creation" data-type="Digital gouache" data-desc="Write a few lines about this artwork here: the idea behind it, the tools you used, or the story.">
               <img src="assets/whirl.png" alt="Galaxy art">
               <span>View art</span>
             </button>
@@ -91,8 +93,8 @@
     <section id="about" class="about sec">
       <div class="wrap about-in">
         <div class="about-pic fade">
-          <img src="assets/corner.jpg.png" alt="Corner portrait">
-          <div class="stamp"><b>Corner</b><span>since 2024</span></div>
+          <img src="assets/last.jpe" alt="Corner portrait">
+          <div class="stamp"><b>Corner</b><span>since 2025</span></div>
         </div>
         <div class="about-txt fade">
           <p class="mini">A little more about me</p>
@@ -117,12 +119,15 @@
           <p class="mini">Say hello</p>
           <h2>Let’s make something gentle and memorable.</h2>
           <p>For art requests, small collaborations, or a simple hello, leave a note here.</p>
+          <!-- Replace YOUR_USERNAME / YOUR_FACEBOOK_NAME with your real accounts -->
           <div class="social">
-            <a href="https://www.facebook.com" target="_blank" rel="noreferrer"><span>fb</span>Facebook</a>
-            <a href="https://www.instagram.com" target="_blank" rel="noreferrer"><span>ig</span>Instagram</a>
+            <a href="https://www.facebook.com/profile.php?id=61595073682366" target="_blank" rel="noreferrer"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.2h-3.1V7.8c0-.9.3-1.5 1.6-1.5h1.7V3.4c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.1v2.4H7.7V13h2.7v8h3.1z"/></svg></span>Facebook</a>
+            <a href="https://www.instagram.com/mi11ces/" target="_blank" rel="noreferrer"><span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg></span>Instagram</a>
           </div>
         </div>
         <form class="form fade">
+          <!-- Capybara: add your image to assets/, then remove these comment marks
+          <img class="capy" src="assets/capybara.png" alt="Capybara"> -->
           <label>Name<input type="text" name="name" placeholder="Your name" required></label>
           <label>Email<input type="email" name="email" placeholder="you@email.com" required></label>
           <label>Message<textarea name="message" rows="5" placeholder="Tell me what you have in mind" required></textarea></label>
@@ -139,10 +144,31 @@
     <span>© <b id="yr"></b> Corner</span>
   </footer>
 
+  <!-- Artwork viewer (filled in by script.js) -->
   <dialog class="pop">
-    <button class="x" aria-label="Close artwork">×</button>
-    <img src="assets/parol.png" alt="Artwork preview">
-    <p></p>
+    <!-- Top bar -->
+    <div class="pop-bar">
+      <span class="logo">Corner of art</span>
+      <button class="x" aria-label="Close artwork">← Back to works</button>
+    </div>
+
+    <!-- Picture + info card -->
+    <div class="pop-body">
+      <div class="pop-frame">
+        <img src="assets/parol.png" alt="Artwork preview">
+      </div>
+      <div class="pop-info">
+        <h3 class="pop-title"></h3>
+        <p class="pop-type"></p>
+        <p class="pop-desc"></p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="pop-foot">
+      <span class="logo">Corner of art</span>
+      <p>Where every drawing comes to life.</p>
+    </div>
   </dialog>
 
   <script src="script.js"></script>
