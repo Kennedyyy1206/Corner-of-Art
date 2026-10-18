@@ -26,7 +26,7 @@
 }
 
 html{
-  scroll-behavior:smooth;
+  overflow-x:hidden; /* no sideways scrolling */
 }
 
 body{
@@ -36,8 +36,20 @@ body{
   color:var(--ink);
   background:var(--leaf);
   font-family:"DM Sans", sans-serif;
+  position:relative; /* keeps the circles inside the page, even if a screenshot tool moves them */
   overflow-x:hidden;
+  overflow:clip; /* cuts off anything (like the circles) that sticks out past the page */
   transition:background .6s;
+  display:flex; /* page = column: main grows, footer sits at the bottom */
+  flex-direction:column;
+  min-height:100vh;
+  min-height:100dvh; /* phones: ignores the browser bar */
+}
+
+main{
+  flex:1; /* takes the free space above the footer */
+  display:flex;
+  flex-direction:column;
 }
 
 img{
@@ -145,7 +157,7 @@ h2{
 .sec{
   position:relative;
   z-index:1;
-  min-height:100vh;
+  flex:1 0 auto; /* fills the page height without adding extra scroll */
 }
 
 /* Hidden only once script.js runs (it adds .js) */
@@ -181,65 +193,41 @@ body[data-page="contact"]{
   --o2:rgba(215,239,114,.12);
 }
 
-/* Circles (CSS only) */
-body::before,
-body::after{
+/* Circles: ONE fixed layer draws both, so nothing can stick out and add scroll space */
+body::before{
   content:"";
   position:fixed;
+  inset:0;
   z-index:0;
-  border-radius:50%;
   pointer-events:none;
-  transition:all 1.2s cubic-bezier(.6,.1,.2,1), background .6s;
+  background-image:
+    radial-gradient(closest-side, var(--o1) 98%, transparent 100%),
+    radial-gradient(closest-side, var(--o2) 98%, transparent 100%);
+  background-repeat:no-repeat;
+  background-size:590px 590px, 430px 430px; /* big circle, small circle */
+  background-position:
+    calc(100% - 3vw) 11vh,
+    15vw calc(100% + 9vh);
+  transition:background-position 1.2s cubic-bezier(.6,.1,.2,1);
 }
 
-body::before{
-  width:590px;
-  height:590px;
-  right:3%;
-  top:11%;
-  background:var(--o1);
-}
-
-body::after{
-  width:430px;
-  height:430px;
-  left:15%;
-  bottom:-9%;
-  background:var(--o2);
-}
-
-/* circle positions per page */
+/* circle positions per page (x y for the big circle, then the small one) */
 body[data-page="works"]::before{
-  right:-8%;
-  top:48%;
-}
-
-body[data-page="works"]::after{
-  left:-6%;
-  bottom:auto;
-  top:8%;
+  background-position:
+    calc(100% + 8vw) 48vh,
+    -6vw 8vh;
 }
 
 body[data-page="about"]::before{
-  right:auto;
-  left:-8%;
-  top:-12%;
-}
-
-body[data-page="about"]::after{
-  left:auto;
-  right:6%;
-  bottom:-14%;
+  background-position:
+    -8vw -12vh,
+    calc(100% - 6vw) calc(100% + 14vh);
 }
 
 body[data-page="contact"]::before{
-  right:-10%;
-  top:-14%;
-}
-
-body[data-page="contact"]::after{
-  left:4%;
-  bottom:-16%;
+  background-position:
+    calc(100% + 10vw) -14vh,
+    4vw calc(100% + 16vh);
 }
 
 /* =========================================================
@@ -336,6 +324,10 @@ body[data-page="contact"]::after{
 .arrow:hover{
   background:var(--dark);
   transform:translateY(-50%) scale(1.08);
+}
+
+.arrow[hidden]{
+  display:none; /* used by script.js to hide an arrow */
 }
 
 .prev{
@@ -1205,13 +1197,7 @@ blockquote span{
   }
 
   body::before{
-    width:420px;
-    height:420px;
-  }
-
-  body::after{
-    width:300px;
-    height:300px;
+    background-size:420px 420px, 300px 300px; /* smaller circles on phones */
   }
 
   /* home */
@@ -1387,6 +1373,28 @@ blockquote span{
 }
 
 /* Reduced motion */
+/* Print / save as PDF */
+@media print{
+  .arrow,
+  body::before{
+    display:none; /* fixed items would repeat on every printed page */
+  }
+
+  .head{
+    position:absolute; /* shows once at the top */
+  }
+
+  .js .fade{
+    opacity:1; /* show everything */
+    transform:none;
+  }
+
+  body{
+    -webkit-print-color-adjust:exact; /* keep background colours */
+    print-color-adjust:exact;
+  }
+}
+
 @media (prefers-reduced-motion:reduce){
   html{
     scroll-behavior:auto;
