@@ -117,7 +117,7 @@ pop.addEventListener('cancel', e => {
 form.addEventListener('submit', e => {
   e.preventDefault()
   const name = new FormData(form).get('name').trim()
-  msg.textContent = `Thanks, ${name}. Your note is ready to send.`
+  msg.textContent = `Thanks, ${name}. Your note has been sent!`
   form.reset()
 })
 
